@@ -6,7 +6,7 @@ def helpMessage() {
 
         Mandatory arguments:
          --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/MIGE/01_DATA/01_FASTQ/T055-8-*.fastq.gz")
-         --output_dir                   Output directory to place output (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
+         --output_dir                   Output directory to place output (e.g., "/MIGE/01_DATA/01_FASTQ")
          --reference_fasta              fasta file to be used as reference (e.g., /path/to/GRCh38.primary_assembly.genome.fa)
 
         Optional arguments:
