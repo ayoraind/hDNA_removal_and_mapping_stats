@@ -20,9 +20,9 @@ def help_message() {
 def version_message(String version) {
       println(
             """
-            ===========================================================================
-             Human DNA Removal and Mapping Statistics TAPIR Pipeline version ${version}
-            ===========================================================================
+            ============================================================================
+             HUMAN DNA REMOVAL AND MAPPING STATISTICS: TAPIR Pipeline version ${version}
+            ============================================================================
             """.stripIndent()
         )
 
@@ -30,21 +30,21 @@ def version_message(String version) {
 
 
 def pipeline_start_message(String version, Map params){
-    log.info "======================================================================"
-    log.info "                  KROCUS TAPIR MLST Pipeline version ${version}"
-    log.info "======================================================================"
+    log.info "==============================================================================="
+    log.info "    HUMAN DNA REMOVAL AND MAPPING STATISTICS: TAPIR Pipeline version ${version}"
+    log.info "==============================================================================="
     log.info "Running version   : ${version}"
     log.info "Fastq inputs      : ${params.reads}"
     log.info ""
-    log.info "-------------------------- Other parameters --------------------------"
+    log.info "-------------------------- Other parameters -----------------------------------"
     params.sort{ it.key }.each{ k, v ->
         if (v){
             log.info "${k}: ${v}"
         }
     }
-    log.info "======================================================================"
+    log.info "==============================================================================="
     log.info "Outputs written to path '${params.output_dir}'"
-    log.info "======================================================================"
+    log.info "==============================================================================="
 
     log.info ""
 }
