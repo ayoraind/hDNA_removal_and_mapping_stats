@@ -21,24 +21,32 @@ final_params = check_params(merged_params)
 pipeline_start_message(version, final_params)
 
 // include processes
-include { MINIMAP2_INDEX; MINIMAP2_ALIGN; EXTRACT_MICROBIAL_READS; BAM_STATISTICS;  COMBINE_BAM_STATISTICS } from './modules/processes.nf' addParams(final_params)
+include { MINIMAP2_INDEX; MINIMAP2_SAM; SAM_SORT_AND_INDEX; EXTRACT_MICROBIAL_READS; BAM_STATISTICS;  COMBINE_BAM_STATISTICS } from './modules/processes.nf' addParams(final_params)
 
 workflow  {
          fasta_ch = channel
                           .fromPath( final_params.reference_fasta, checkIfExists: true )
                           .map { file -> tuple(file.baseName, file) }
-         align_ch = channel
+         reads_ch = channel
                           .fromPath( final_params.reads, checkIfExists: true )
                           .map { file -> tuple(file.simpleName, file) }
 
 
          MINIMAP2_INDEX(fasta_ch)
+	 
+	 ch_index  = MINIMAP2_INDEX.out.index_ch
 
-         MINIMAP2_ALIGN(align_ch, MINIMAP2_INDEX.out.index_ch)
+         // combine method used instead of join method as both channels (reads_ch and ch_index) share no key
+         combine_ch = reads_ch.combine(ch_index)
 
-         EXTRACT_MICROBIAL_READS(MINIMAP2_ALIGN.out.bam_ch)
+         MINIMAP2_SAM ( combine_ch )
 
-         BAM_STATISTICS(MINIMAP2_ALIGN.out.bam_ch)
+         SAM_SORT_AND_INDEX(MINIMAP2_SAM.out.sam_ch)
+
+         EXTRACT_MICROBIAL_READS(SAM_SORT_AND_INDEX.out.bam_ch)
+
+         BAM_STATISTICS(SAM_SORT_AND_INDEX.out.bam_ch)
+
 
          collected_bam_statistics_ch = BAM_STATISTICS.out.bam_stats_ch.collect( sort: {a, b -> a[0].getBaseName() <=> b[0].getBaseName()} )
 
