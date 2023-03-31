@@ -1,8 +1,4 @@
 process MINIMAP2_INDEX {
-//    publishDir "${params.output_dir}/minimap", mode:'copy'
-    
-    // Note: the versions here need to match the versions used in minimap2/align
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/hDNA_removal_and_map_stats/mapping_env.yml"
     
     input:
     tuple val(meta), path(reference_fasta)
@@ -33,8 +29,6 @@ process MINIMAP2_INDEX {
 process MINIMAP2_SAM {
     tag "$meta"
 
-   // publishDir "${params.output_dir}", mode:'copy'
-
     errorStrategy { task.attempt <= 5 ? "retry" : "finish" }
     maxRetries 5
 
@@ -61,8 +55,6 @@ process MINIMAP2_SAM {
 
 process SAM_SORT_AND_INDEX {
     tag "$meta"
-
-   // publishDir "${params.output_dir}", mode:'copy'
 
     input:
     tuple val(meta), path(sam)
@@ -91,9 +83,6 @@ process SAM_SORT_AND_INDEX {
 process EXTRACT_MICROBIAL_READS {
     publishDir "${params.output_dir}", mode:'copy'
     tag "extract microbial DNA from $sample_id"
-    
-    // Note: the versions here need to match the versions used in the mulled container below and minimap2/index
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/hDNA_removal_and_map_stats/mapping_env.yml"
     
     input:
     tuple val(sample_id), path(bam)
@@ -133,8 +122,6 @@ process BAM_STATISTICS {
     publishDir "${params.output_dir}", mode:'copy'
     tag "$sample_id"
     
-    
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/hDNA_removal_and_map_stats/mapping_env.yml"
     
     input:
     tuple val(sample_id), path(bam)
