@@ -3,3 +3,4 @@ work
 *.nextflow*
 Sample_files
 .default_output
+GRCh38.primary_assembly.genome.fa

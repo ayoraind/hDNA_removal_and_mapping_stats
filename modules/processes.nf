@@ -28,7 +28,7 @@ process MINIMAP2_INDEX {
 
 process MINIMAP2_SAM {
     tag "$meta"
-
+    memory { 4.GB * task.attempt }
     errorStrategy { task.attempt <= 5 ? "retry" : "finish" }
     maxRetries 5
 
@@ -44,7 +44,7 @@ process MINIMAP2_SAM {
 
     script:
     """
-    minimap2 -ax map-ont -t 12 $index $reads  > ${meta}.sam
+    minimap2 -ax map-ont -t $task.cpus $index $reads  > ${meta}.sam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
