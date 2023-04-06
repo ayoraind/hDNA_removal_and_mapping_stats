@@ -119,7 +119,7 @@ process EXTRACT_MICROBIAL_READS {
 
 
 process BAM_STATISTICS {
-    publishDir "${params.output_dir}", mode:'copy'
+   // publishDir "${params.output_dir}", mode:'copy'
     tag "$sample_id"
     
     
